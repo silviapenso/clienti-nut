@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Lisa · Piano Nutrizionale · Silvia Penso</title>
+<style>
+:root{--green:#144D35;--green-mid:#1E734E;--green-light:#2E9E6B;--green-bg:#EAF3DE;--green-pale:#F2F9F5;--amber:#D4700A;--amber-bg:#FAEEDA;--blue:#1A5E9A;--blue-bg:#E6F1FB;--red-bg:#FAECE7;--red:#993C1D;--pink:#C2185B;--pink-bg:#FCE4EC;--purple:#6A1B9A;--purple-bg:#F3E5F5;--gray:#555;--gray-bg:#F5F5F5;--border:#D8E8DC;--text:#1A1A1A;--muted:#666;--white:#FFFFFF;--r:14px;--rs:8px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F1;color:var(--text);font-size:15px;line-height:1.5}
+.topbar{background:var(--green);position:sticky;top:0;z-index:100}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.brand-name{font-size:13px;font-weight:600;color:#fff}
+.brand-sub{font-size:10px;color:#90C8A8;letter-spacing:.06em;text-transform:uppercase}
+.client-pill{background:rgba(255,255,255,.15);border-radius:20px;padding:5px 12px;font-size:12px;color:#fff;font-weight:500}
+.nav-tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:2px;background:#0F3D25;padding:0 8px}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:10px 14px;font-size:12px;font-weight:500;color:#90C8A8;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-tab.active{color:#fff;border-bottom-color:#4EC88A}
+.section{display:none;padding:16px}
+.section.active{display:block}
+.card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.card-title{font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.hero{background:var(--green);border-radius:var(--r);padding:20px 16px;margin-bottom:12px;color:#fff}
+.hero-name{font-size:22px;font-weight:700}
+.hero-sub{font-size:13px;color:#B0E0C0;margin-top:2px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.hero-stat{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 8px;text-align:center}
+.hero-stat-val{font-size:18px;font-weight:700;color:#fff}
+.hero-stat-lbl{font-size:10px;color:#90C8A8;margin-top:2px}
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.day-card{border:1.5px solid var(--border);border-radius:8px;padding:12px 10px;cursor:pointer;transition:all .2s;background:var(--white)}
+.day-card.active{border-color:var(--green);background:var(--green-pale)}
+.day-card-emoji{font-size:22px;margin-bottom:4px}
+.day-card-name{font-size:13px;font-weight:600;color:var(--text)}
+.day-card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.macro-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.macro-card{background:var(--green-pale);border-radius:8px;padding:12px;text-align:center}
+.macro-val{font-size:18px;font-weight:700;color:var(--green)}
+.macro-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.meal-item{padding:12px 0;border-bottom:1px solid #F0F0F0}
+.meal-item:last-child{border-bottom:none;padding-bottom:0}
+.meal-item.optional{opacity:.8}
+.meal-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.meal-time{font-size:11px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.meal-name{font-size:14px;font-weight:600;color:var(--text)}
+.meal-optional{font-size:11px;color:var(--amber);background:var(--amber-bg);padding:2px 8px;border-radius:10px}
+.meal-macro{font-size:12px;color:var(--green-mid);font-weight:600;margin-top:5px}
+.meal-note{font-size:12px;color:var(--amber);margin-top:4px;font-style:italic}
+.swap-box{border:1.5px dashed var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.swap-cur{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.swap-emoji{font-size:28px}
+.swap-name{font-size:15px;font-weight:600;color:var(--text)}
+.swap-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.swap-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;border:1.5px solid var(--green);border-radius:8px;background:var(--white);color:var(--green);font-size:13px;font-weight:600;cursor:pointer}
+.swap-btn:active{background:var(--green-pale);transform:scale(.98)}
+.dots{display:flex;justify-content:center;gap:4px;margin-top:8px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .2s}
+.dot.on{background:var(--green);width:14px;border-radius:3px}
+.ci-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;justify-content:space-between}
+.ci-val{color:var(--green)}
+input[type=range]{width:100%;accent-color:var(--green);margin-bottom:14px}
+.ci-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--text);background:var(--white);margin-bottom:10px}
+.ci-input:focus{outline:none;border-color:var(--green)}
+.save-btn{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.copy-btn{width:100%;padding:14px;background:var(--white);color:var(--green);border:1.5px solid var(--green);border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.ci-entry{background:var(--green-pale);border-radius:8px;padding:12px;margin-bottom:8px}
+.ci-date{font-size:11px;color:var(--muted);margin-bottom:6px}
+.ci-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px}
+.ci-note{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
+.empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
+.tip{border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.tip.g{background:var(--green-bg);border-left:3px solid var(--green-light)}
+.tip.a{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.tip.b{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.tip.r{background:var(--red-bg);border-left:3px solid var(--red)}
+.tip.p{background:var(--pink-bg);border-left:3px solid var(--pink)}
+.tip.v{background:var(--purple-bg);border-left:3px solid var(--purple)}
+.tip-t{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px}
+.tip-b{font-size:12px;color:var(--muted);line-height:1.6}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:6px}
+.bg{background:var(--green-bg);color:#27500A}
+.ba{background:var(--amber-bg);color:#633806}
+.bb{background:var(--blue-bg);color:#0C447C}
+.br{background:var(--red-bg);color:var(--red)}
+.bk{background:var(--gray-bg);color:#444}
+.fase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.fase-card{border:1.5px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all .2s;background:var(--white);text-align:center}
+.fase-card.active-r{border-color:#C2185B;background:#FCE4EC}
+.fase-card.active-y{border-color:#F9A825;background:#FFFDE7}
+.fase-card.active-w{border-color:#6A1B9A;background:#F3E5F5}
+.fase-card.active-o{border-color:#E65100;background:#FFF3E0}
+.fase-emoji{font-size:24px;margin-bottom:4px}
+.fase-nome{font-size:12px;font-weight:600}
+.fase-giorni{font-size:10px;color:var(--muted);margin-top:2px}
+.piatto-card{background:var(--green-pale);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.piatto-emoji{font-size:24px;flex-shrink:0}
+.piatto-nome{font-size:13px;font-weight:600;color:var(--text)}
+.piatto-detail{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+.footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div><div class="brand-name">Silvia Penso</div><div class="brand-sub">Performance Nutrizionale</div></div>
+    <div class="client-pill">👤 Lisa</div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="show('home',this)">🏠 Home</div>
+    <div class="nav-tab" onclick="show('piano',this)">🍽️ Piano</div>
+    <div class="nav-tab" onclick="show('alt',this)">🔄 Alternative</div>
+    <div class="nav-tab" onclick="show('ciclo',this)">🌸 Ciclo</div>
+    <div class="nav-tab" onclick="show('ci',this)">📊 Check-in</div>
+    <div class="nav-tab" onclick="show('regole',this)">💡 Regole</div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="section active" id="s-home">
+  <div class="hero">
+    <div class="hero-name">Ciao Lisa 👋</div>
+    <div class="hero-sub">Piano aggiornato · Giugno 2026</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">49.8</div><div class="hero-stat-lbl">kg peso</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">16%</div><div class="hero-stat-lbl">body fat</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">3 mesi</div><div class="hero-stat-lbl">durata piano</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎯 Obiettivo</div>
+    <div class="tip b"><div class="tip-b">Miglioramento della performance sportiva e aumento di peso — palestra 3x/settimana + downhill nel weekend. Il piano si adatta ogni giorno in base al tuo allenamento.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚡ Indicazioni per giornata</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <tr style="background:var(--green-pale)">
+          <td style="padding:7px 8px;font-weight:700;color:var(--green)">Giornata</td>
+          <td style="padding:7px 8px;text-align:right;font-weight:700;color:var(--green)">Carbo</td>
+          <td style="padding:7px 8px;text-align:right;font-weight:700;color:var(--green)">Prot</td>
+        </tr>
+        <tr><td style="padding:6px 8px;border-bottom:1px solid #F0F0F0">🏋️ Solo palestra</td><td style="padding:6px 8px;text-align:right;border-bottom:1px solid #F0F0F0">~310 g</td><td style="padding:6px 8px;text-align:right;border-bottom:1px solid #F0F0F0">100 g</td></tr>
+        <tr><td style="padding:6px 8px;border-bottom:1px solid #F0F0F0">🚴 Bici / downhill</td><td style="padding:6px 8px;text-align:right;border-bottom:1px solid #F0F0F0">~330 g</td><td style="padding:6px 8px;text-align:right;border-bottom:1px solid #F0F0F0">100 g</td></tr>
+        <tr><td style="padding:6px 8px">😴 Recovery / riposo</td><td style="padding:6px 8px;text-align:right">~260 g</td><td style="padding:6px 8px;text-align:right">100 g</td></tr>
+      </table>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">Le proteine sono fisse ogni giorno — i carboidrati cambiano in base all'attività.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">💧 Idratazione</div>
+    <div class="tip r"><div class="tip-t">Obiettivo fondamentale: 2.5–3.5L al giorno</div><div class="tip-b">Sei abituata a 1–1.5L: non è abbastanza per il tuo livello di attività. Inizia a bere dalla colazione — non recuperare tutto la sera.</div></div>
+  </div>
+</div>
+
+<!-- PIANO -->
+<div class="section" id="s-piano">
+  <div class="card">
+    <div class="card-title">🗓️ Che giornata è oggi?</div>
+    <div class="day-grid">
+      <div class="day-card active" onclick="setDay('palestra',this)"><div class="day-card-emoji">🏋️</div><div class="day-card-name">Solo palestra</div><div class="day-card-sub">forza / ipertrofia</div></div>
+      <div class="day-card" onclick="setDay('bici',this)"><div class="day-card-emoji">🚴</div><div class="day-card-name">Bici / downhill</div><div class="day-card-sub">weekend · bike park</div></div>
+      <div class="day-card" onclick="setDay('recovery',this)"><div class="day-card-emoji">😴</div><div class="day-card-name">Recovery / riposo</div><div class="day-card-sub">rigenerazione</div></div>
+      <div class="day-card" onclick="setDay('libero',this)"><div class="day-card-emoji">🍕</div><div class="day-card-name">Giorno libero</div><div class="day-card-sub">1x settimana</div></div>
+    </div>
+  </div>
+  <div id="day-badge" style="margin-bottom:4px"></div>
+  <div class="macro-row" id="macros"></div>
+  <div class="card"><div class="card-title">🍽️ Piano del giorno</div><div id="meals"></div></div>
+</div>
+
+<!-- ALTERNATIVE -->
+<div class="section" id="s-alt">
+  <div class="card">
+    <div class="card-title">💪 Fonte proteica · pesce e non solo</div>
+    <div class="swap-box">
+      <div class="swap-cur"><div class="swap-emoji" id="pe">🐟</div><div><div class="swap-name" id="pn">Tonno in scatola</div><div class="swap-detail" id="pd">100g sgocciolato · 28g prot</div></div></div>
+      <button class="swap-btn" onclick="nP()">🔄 Prossima alternativa</button>
+      <div class="dots" id="pd2"></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted)">Tutte intercambiabili per apporto proteico.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">🧀 Formaggi · fonte proteica principale</div>
+    <div class="swap-box">
+      <div class="swap-cur"><div class="swap-emoji" id="fe">🫙</div><div><div class="swap-name" id="fn">Stracchino</div><div class="swap-detail" id="fd">80g · 10g prot · ottimo spalmato</div></div></div>
+      <button class="swap-btn" onclick="nF()">🔄 Prossima alternativa</button>
+      <div class="dots" id="fd2"></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted)">Usali come proteina principale, non solo come condimento.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">🌾 Carboidrati</div>
+    <div class="swap-box">
+      <div class="swap-cur"><div class="swap-emoji" id="ce">🍚</div><div><div class="swap-name" id="cn">Riso bianco</div><div class="swap-detail" id="cd">100g crudo · 80g carbo</div></div></div>
+      <button class="swap-btn" onclick="nC()">🔄 Prossima alternativa</button>
+      <div class="dots" id="cd2"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🥘 Piatti completi veloci</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Pronti in 10–15 minuti. Può farli anche da sola con l'acqua a bollire.</div>
+    <div class="piatto-card"><div class="piatto-emoji">🍚</div><div><div class="piatto-nome">Riso + gamberetti + salsa di soia</div><div class="piatto-detail">100g riso · 150g gamberetti surgelati saltati in padella · salsa di soia · olio · verdure</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🫙</div><div><div class="piatto-nome">Couscous + tonno + limone + feta</div><div class="piatto-detail">100g couscous · 100g tonno · 50g feta · pomodorini · olio · limone · origano</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🍝</div><div><div class="piatto-nome">Pasta + uova strapazzate + zucchine + grana</div><div class="piatto-detail">90g pasta · 2 uova · zucchine · grana grattugiato · olio EVO</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🧀</div><div><div class="piatto-nome">Pasta + ricotta + salmone affumicato</div><div class="piatto-detail">90g pasta · 80g ricotta · 80g salmone affumicato · limone · pepe</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🐟</div><div><div class="piatto-nome">Riso + merluzzo surgelato + verdure</div><div class="piatto-detail">100g riso · 150g merluzzo in padella · salsa di soia · aglio in polvere · verdure</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🫙</div><div><div class="piatto-nome">Couscous + sgombro + peperoni</div><div class="piatto-detail">100g couscous · 1 scatola sgombro · peperoni · olio · aceto balsamico</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🍝</div><div><div class="piatto-nome">Pasta + stracchino + bresaola + rucola</div><div class="piatto-detail">90g pasta · 60g stracchino · 60g bresaola · rucola · limone</div></div></div>
+    <div class="piatto-card"><div class="piatto-emoji">🥚</div><div><div class="piatto-nome">Riso + uova + piselli + salsa di soia</div><div class="piatto-detail">100g riso · 2 uova strapazzate · piselli · salsa di soia · olio di sesamo</div></div></div>
+  </div>
+</div>
+
+<!-- CICLO -->
+<div class="section" id="s-ciclo">
+  <div class="card">
+    <div class="card-title">🌸 Nutrizione e ciclo mestruale</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Seleziona la fase in cui ti trovi per le indicazioni del momento.</div>
+    <div class="fase-grid">
+      <div class="fase-card" onclick="setFase('mestruale',this)"><div class="fase-emoji">🔴</div><div class="fase-nome">Mestruale</div><div class="fase-giorni">Giorni 1–5</div></div>
+      <div class="fase-card" onclick="setFase('follicolare',this)"><div class="fase-emoji">🟡</div><div class="fase-nome">Follicolare</div><div class="fase-giorni">Giorni 6–13</div></div>
+      <div class="fase-card" onclick="setFase('ovulatoria',this)"><div class="fase-emoji">⚪</div><div class="fase-nome">Ovulatoria</div><div class="fase-giorni">Giorni 14–16</div></div>
+      <div class="fase-card" onclick="setFase('luteale',this)"><div class="fase-emoji">🟠</div><div class="fase-nome">Luteale</div><div class="fase-giorni">Giorni 17–28</div></div>
+    </div>
+  </div>
+  <div id="fase-content"></div>
+</div>
+
+<!-- CHECK-IN -->
+<div class="section" id="s-ci">
+  <div class="card">
+    <div class="card-title">📊 Check-in settimanale</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Ogni lunedì mattina. Compila e copia il messaggio da mandare a Silvia su WhatsApp 💬</div>
+    <div class="ci-label">⚖️ Peso <span class="ci-val" id="pv">— kg</span></div>
+    <input type="number" class="ci-input" id="pi" placeholder="es. 49.8" step="0.1" oninput="document.getElementById('pv').textContent=this.value?this.value+' kg':'— kg'">
+    <div class="ci-label">😴 Qualità del sonno <span class="ci-val" id="sv">5/10</span></div>
+    <input type="range" min="1" max="10" value="5" id="si" oninput="document.getElementById('sv').textContent=this.value+'/10'">
+    <div class="ci-label">⚡ Energia <span class="ci-val" id="ev">5/10</span></div>
+    <input type="range" min="1" max="10" value="5" id="ei" oninput="document.getElementById('ev').textContent=this.value+'/10'">
+    <div class="ci-label">💪 Performance <span class="ci-val" id="fv">5/10</span></div>
+    <input type="range" min="1" max="10" value="5" id="fi" oninput="document.getElementById('fv').textContent=this.value+'/10'">
+    <div class="ci-label">🍽️ Fame <span class="ci-val" id="hv">5/10</span></div>
+    <input type="range" min="1" max="10" value="5" id="hi" oninput="document.getElementById('hv').textContent=this.value+'/10'">
+    <div class="ci-label">🤤 Voglia di mangiare <span class="ci-val" id="vv">5/10</span></div>
+    <input type="range" min="1" max="10" value="5" id="vi" oninput="document.getElementById('vv').textContent=this.value+'/10'">
+    <div class="ci-label">🚴 Allenamenti questa settimana <span class="ci-val" id="av">—</span></div>
+    <input type="text" class="ci-input" id="ai" placeholder="es. 3x palestra + 1 bici DH" oninput="document.getElementById('av').textContent=this.value||'—'">
+    <div class="ci-label">🌸 Fase ciclo <span class="ci-val" id="cv">—</span></div>
+    <select class="ci-input" id="cli" onchange="document.getElementById('cv').textContent=this.value||'—'">
+      <option value="">Seleziona...</option>
+      <option value="Mestruale (gg 1–5)">🔴 Mestruale (gg 1–5)</option>
+      <option value="Follicolare (gg 6–13)">🟡 Follicolare (gg 6–13)</option>
+      <option value="Ovulatoria (gg 14–16)">⚪ Ovulatoria (gg 14–16)</option>
+      <option value="Luteale (gg 17–28)">🟠 Luteale (gg 17–28)</option>
+    </select>
+    <div class="ci-label" style="margin-bottom:6px">📝 Note libere</div>
+    <textarea class="ci-input" id="ni" rows="3" placeholder="Come ti sei sentita? Qualcosa di diverso?"></textarea>
+    <button class="copy-btn" onclick="copyWA()">📋 Copia messaggio WhatsApp per Silvia</button>
+    <button class="save-btn" onclick="saveCI()">✅ Salva check-in</button>
+    <div id="copy-ok" style="display:none;text-align:center;font-size:13px;color:var(--green);margin-top:4px">✅ Copiato! Incollalo su WhatsApp a Silvia</div>
+  </div>
+  <div class="card"><div class="card-title">📅 Storico</div><div id="ci-hist"></div></div>
+</div>
+
+<!-- REGOLE -->
+<div class="section" id="s-regole">
+  <div class="card">
+    <div class="card-title">📌 Il nostro piano insieme</div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-t">1. I nostri obiettivi sono tre pasti al giorno</div><div class="tip-b">Colazione, pranzo e cena. Non devono essere perfetti né abbondanti — l'importante è esserci.</div></div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-t">2. I carboidrati cambiano, le proteine no</div><div class="tip-b">Nei giorni di palestra e bici mangi più carboidrati, nei giorni di riposo un po' meno. L'app ti dice già cosa fare — non devi calcolare niente.</div></div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-t">3. Le proteine sono ovunque</div><div class="tip-b">Tonno, uova, formaggi, bresaola, pesce surgelato — 100g al giorno distribuiti come vuoi. Hai tante opzioni facili e veloci.</div></div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-t">4. Il pre-allenamento che fai già va benissimo</div><div class="tip-b">Pane + burro d'arachidi + miele oppure banana + biscotti: è già quello giusto. Non cambiare niente, fallo 60–90 min prima.</div></div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-t">5. Post-allenamento senza stress</div><div class="tip-b">Se ceni entro un'ora dall'allenamento, la cena è già il tuo post-workout. proteine in polvere solo se la cena è lontana.</div></div>
+    <div class="tip r"><div class="tip-t">💧 Idratazione: 2.5–3.5L al giorno — questo è fondamentale</div><div class="tip-b">Inizia dall'acqua della colazione. Non rimandare tutto alla sera. Il tuo corpo ne ha bisogno ogni ora, non solo la notte.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚕️ Note personali</div>
+    <div class="tip a" style="margin-bottom:8px"><div class="tip-t">🩸 Ferro — tienilo d'occhio</div><div class="tip-b">Sgombro, tonno, uova e bresaola sono le tue fonti più facili. Abbina qualcosa con vitamina C (limone, peperoni, kiwi) — aiuta l'assorbimento.</div></div>
+    <div class="tip g"><div class="tip-t">🫘 Legumi</div><div class="tip-b">Fagioli e ceci li evitiamo. Piselli ok. Lenticchie rosse decorticate puoi provarle in piccole quantità se hai curiosità.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">💊 Integrazione</div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-b">🐟 <strong>Omega-3</strong> — riprendi a prenderli, importanti per recupero e fase luteale</div></div>
+    <div class="tip g" style="margin-bottom:8px"><div class="tip-b">💪 <strong>Proteine proteine in polvere</strong> — post bici o post palestra se la cena è lontana</div></div>
+    <div class="tip g"><div class="tip-b">🌞 <strong>Vitamina D</strong> — ne parliamo dopo gli esami del sangue</div></div>
+  </div>
+</div>
+
+<div class="footer">Piano Giugno 2026 · <strong>Silvia Penso</strong> · Performance Nutrizionale</div>
+
+<script>
+const DY={
+  palestra:{bc:'bg',bl:'🏋️ Solo palestra',c:'~310 g',p:'100 g',g:'60 g',
+    meals:[
+      {t:'7:30–8:00',n:'Colazione',opt:false,body:'Latte senza lattosio 200ml + muesli Kellogg\'s 60g + frutta fresca (banana, fragole, kiwi)<br>— oppure pane 60g + stracchino 50g + marmellata + frutto a piacere',macro:'~65g carbo · 12g prot',note:''},
+      {t:'12:30–13:00',n:'Pranzo',opt:false,body:'Pasta 90g o riso 100g o couscous 100g + proteina (tonno / uova / formaggio 80g) + verdure + olio + salsa di soia o limone<br>+ frutta fresca a fine pasto se hai voglia',macro:'~100g carbo · 30g prot',note:''},
+      {t:'15:30–16:00',n:'Spuntino',opt:false,body:'Banana + burro d\'arachidi 20g<br>— oppure frutta secca 30g + frutta fresca (mela, pesca, kiwi)<br>— oppure frutta disidratata 30g + pane 30g',macro:'~35g carbo',note:''},
+      {t:'',n:'Secondo spuntino',opt:true,body:'Frutta fresca a piacere (banana, uva, pesche) + 2 biscotti<br>— oppure frutta disidratata 20g + stracchino su pane',macro:'~25g carbo',note:''},
+      {t:'17:30–18:00',n:'Pre-palestra',opt:false,body:'Pane 60g + burro d\'arachidi 20g + miele 10g<br>— oppure banana + 3 biscotti',macro:'~45g carbo',note:'60–90 min prima'},
+      {t:'20:30–21:00',n:'Cena post-palestra',opt:false,body:'Piatto completo: carboidrato 80g + proteina abbondante + verdure. Vedi 🔄 Alternative per idee veloci.<br>+ frutta fresca leggera a fine cena se hai voglia',macro:'~90g carbo · 35g prot',note:'Se sei lontana dalla cena: proteine in polvere subito dopo.'},
+    ]},
+  bici:{bc:'ba',bl:'🚴 Bici / downhill',c:'~330 g',p:'100 g',g:'64 g',
+    meals:[
+      {t:'7:30–8:00',n:'Colazione pre-bici',opt:false,body:'Muesli 70g + latte 200ml + banana o frutto fresco<br>— oppure pane 80g + marmellata + burro d\'arachidi 20g + frutta fresca',macro:'~75g carbo · 12g prot',note:''},
+      {t:'In uscita',n:'Durante la bici',opt:false,body:'Gel o barrette ogni 45–60 min se uscita > 90 min. Banana, datteri o frutta disidratata vanno benissimo.',macro:'30–60g carbo ogni ora',note:''},
+      {t:'Subito dopo',n:'Recovery immediato',opt:false,body:'Proteine proteine in polvere + banana o succo di frutta 100%',macro:'~30g carbo · 25g prot',note:'Entro 30 min dall\'uscita'},
+      {t:'13:00–14:00',n:'Pranzo abbondante',opt:false,body:'Carboidrato abbondante 110g + proteina + verdure + olio. Couscous + sgombro + verdure è velocissimo.<br>+ frutta fresca a fine pasto',macro:'~125g carbo · 35g prot',note:'Giornata di bici = più carbo. Non lesinare.'},
+      {t:'',n:'Secondo spuntino',opt:true,body:'Frutta fresca a piacere + frutta secca 20g<br>— oppure banana + pane + stracchino',macro:'~25g carbo',note:''},
+    ]},
+  recovery:{bc:'bk',bl:'😴 Recovery / riposo',c:'~260 g',p:'100 g',g:'53 g',
+    meals:[
+      {t:'7:30–8:00',n:'Colazione',opt:false,body:'Latte 200ml + muesli 50g + frutta fresca (banana, fragole, kiwi)<br>— oppure pane 50g + stracchino 60g + frutta a piacere',macro:'~55g carbo · 12g prot',note:''},
+      {t:'12:30–13:00',n:'Pranzo',opt:false,body:'Pasta o riso 80g + proteina (tonno / uova / formaggio) + verdure + olio<br>+ frutta fresca a fine pasto se hai voglia',macro:'~80g carbo · 28g prot',note:''},
+      {t:'16:00',n:'Spuntino',opt:false,body:'Frutta fresca a piacere (mela, pesca, uva, banana) + frutta secca 20g<br>— oppure frutta disidratata 25g + pane 30g + stracchino',macro:'~25g carbo',note:''},
+      {t:'',n:'Secondo spuntino',opt:true,body:'Frutta fresca a piacere — anche solo una banana o un kiwi va benissimo',macro:'~15g carbo',note:''},
+      {t:'19:30–20:00',n:'Cena',opt:false,body:'Proteina abbondante + verdure + carboidrato 50g. Es: uova 3 + insalata + pane 50g — oppure tonno + couscous + verdure.<br>+ frutta leggera a fine cena se hai voglia',macro:'~50g carbo · 30g prot',note:''},
+    ]},
+  libero:{bc:'ba',bl:'🍕 Giorno libero',c:'—',p:'—',g:'—',
+    meals:[
+      {t:'',n:'Giorno libero 🎉',opt:false,body:'Una volta a settimana, preferibilmente dopo l\'allenamento più intenso. Mangia quello che hai voglia — è parte del piano.',macro:'',note:'Non serve aggiustare niente il giorno dopo.'},
+    ]},
+};
+
+const PR=[
+  {e:'🐟',n:'Tonno in scatola',d:'100g sgocciolato · 28g prot'},
+  {e:'🐟',n:'Sgombro in scatola',d:'100g · 19g prot · ricco di omega-3'},
+  {e:'🐟',n:'Salmone affumicato',d:'80g · 17g prot'},
+  {e:'🦐',n:'Gamberetti surgelati',d:'150g · 20g prot · 5 min in padella'},
+  {e:'🐠',n:'Merluzzo surgelato',d:'150g · 26g prot · 15 min padella o forno'},
+  {e:'🥚',n:'3 uova intere',d:'18g prot'},
+  {e:'🥩',n:'Bresaola',d:'80g · 22g prot · già pronta'},
+  {e:'🍖',n:'Prosciutto cotto',d:'80g · 17g prot · già pronto'},
+  {e:'🌱',n:'Tofu',d:'150g · 14g prot · cubetti con soia in padella'},
+  {e:'🌿',n:'Tempeh',d:'100g · 19g prot · saltato con soia e verdure'},
+  {e:'🍗',n:'Pollo / tacchino',d:'120g · 30g prot · occasionale'},
+];
+
+const FM=[
+  {e:'🫙',n:'Stracchino',d:'80g · 10g prot · spalmalo su tutto'},
+  {e:'🧀',n:'Ricotta',d:'100g · 10g prot · cremosa come la Philadelphia'},
+  {e:'🥛',n:'Fiocchi di latte',d:'150g · 18g prot · leggeri e proteici'},
+  {e:'🧀',n:'Mozzarella',d:'125g · 18g prot · piatto unico con verdure'},
+  {e:'🧀',n:'Feta',d:'70g · 11g prot · ottima con couscous'},
+  {e:'🧀',n:'Scamorza',d:'80g · 18g prot · 2 min in padella'},
+  {e:'🧀',n:'Grana / parmigiano',d:'30g · 9g prot · usalo come condimento abbondante'},
+];
+
+const CA=[
+  {e:'🍚',n:'Riso bianco',d:'100g crudo · 80g carbo'},
+  {e:'🍝',n:'Pasta',d:'90g cruda · 63g carbo'},
+  {e:'🫙',n:'Couscous',d:'100g crudo · 72g carbo · pronto in 5 min'},
+  {e:'🥔',n:'Patate bollite',d:'350g cotte · 58g carbo'},
+  {e:'🥣',n:'Muesli Kellogg\'s',d:'60g · 43g carbo'},
+  {e:'🍞',n:'Pane',d:'80g · 42g carbo'},
+];
+
+const FASI={
+  mestruale:{cls:'active-r',titolo:'🔴 Fase mestruale · Giorni 1–5',sotto:'Gonfiore, nausea, mal di schiena — pasti piccoli e leggeri',tips:[
+    {tipo:'r',t:'⚠️ Cosa alleggerire',b:'No legumi in questi giorni — peggiorano il gonfiore. Salsa di soia con moderazione (trattiene liquidi). Pasti piccoli e frequenti, soprattutto la sera.'},
+    {tipo:'g',t:'🩸 Ferro — priorità in questa fase',b:'Il corpo perde ferro: sgombro, tonno, uova, bresaola più spesso del solito. Abbina sempre vitamina C (limone, peperoni, kiwi, fragole) per assorbirlo meglio.'},
+    {tipo:'a',t:'🍫 Magnesio per i crampi',b:'Cioccolato fondente 70%+ (30g), frutta secca, avena — aiutano con i crampi e il mal di schiena.'},
+    {tipo:'b',t:'🍚 Carboidrati semplici',b:'Riso bianco, pasta, couscous, pane — il corpo li vuole in questa fase. Assecondalo.'},
+    {tipo:'p',t:'💧 Idratazione extra',b:'2.5–3L di acqua e tisane. Aiuta a ridurre gonfiore e mal di schiena.'},
+  ]},
+  follicolare:{cls:'active-y',titolo:'🟡 Fase follicolare · Giorni 6–13',sotto:'Energia in risalita — momento migliore per allenarsi duro',tips:[
+    {tipo:'g',t:'⚡ Sfrutta questa fase',b:'Energia e umore in aumento. È il momento ideale per gli allenamenti più intensi in palestra — il corpo risponde meglio agli stimoli di forza.'},
+    {tipo:'a',t:'🌾 Più carbo nei giorni di palestra',b:'Il metabolismo è più efficiente adesso. Puoi andare verso la parte alta del range di carboidrati senza pensarci troppo.'},
+    {tipo:'g',t:'🫘 Piselli ok',b:'In questa fase la digestione è migliore — puoi reintrodurre i piselli senza problemi.'},
+    {tipo:'b',t:'💪 Proteine invariate',b:'Mantieni i 100g al giorno. La sintesi proteica è ottimale in questa finestra.'},
+  ]},
+  ovulatoria:{cls:'active-w',titolo:'⚪ Fase ovulatoria · Giorni 14–16',sotto:'Picco di energia — non ridurre i pasti',tips:[
+    {tipo:'g',t:'🏋️ Picco di forza',b:'Energia al massimo. Sfruttala per gli allenamenti più pesanti — il corpo è al suo meglio in questa finestra.'},
+    {tipo:'a',t:'🍽️ Appetito spesso ridotto',b:'È normale che la fame cali. Non saltare i pasti però — mantieni i macro anche se devi forzarti un po\'. I formaggi e il tonno sono tuoi alleati: proteici e facili da mandare giù.'},
+    {tipo:'b',t:'💧 Idratazione importante',b:'In fase ovulatoria la temperatura corporea sale leggermente. Bevi 3L anche nei giorni di riposo.'},
+  ]},
+  luteale:{cls:'active-o',titolo:'🟠 Fase luteale · Giorni 17–28',sotto:'Fame aumentata e gonfiore — gestiscili senza combatterli',tips:[
+    {tipo:'r',t:'⚠️ Il giorno prima del ciclo',b:'Gonfiore e nausea in arrivo: pasti piccoli e frequenti, no legumi, no cibi pesanti la sera, salsa di soia con moderazione — carboidrati semplici e leggeri.'},
+    {tipo:'a',t:'🍽️ Fame aumentata — è normale',b:'Non combatterla: aumenta i carboidrati sani (pane, riso, frutta) piuttosto che snack. Il corpo sta lavorando di più in questa fase.'},
+    {tipo:'g',t:'🐟 Omega-3 e magnesio',b:'Sgombro, salmone, frutta secca, cioccolato fondente. Riprendi gli omega-3 se li hai sospesi — riducono i sintomi.'},
+    {tipo:'b',t:'🧂 Meno sale',b:'Aiuta a limitare la ritenzione idrica. Attenzione alla salsa di soia in questi giorni.'},
+    {tipo:'p',t:'💊 Utili in questa fase',b:'Magnesio bisglicinato 300mg la sera, omega-3. Parlane con Silvia prima di aggiungere altro.'},
+  ]},
+};
+
+let pi=0,fi=0,ci=0,cd='palestra';
+
+function show(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  el.classList.add('active');window.scrollTo(0,0);
+}
+
+function setDay(d,el){
+  cd=d;
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  rPiano();
+}
+
+function rPiano(){
+  const d=DY[cd];if(!d)return;
+  document.getElementById('day-badge').innerHTML='<span class="badge '+(d.bc||'bg')+'" style="font-size:12px;padding:5px 14px">'+d.bl+'</span>';
+  if(d.c==='—'){
+    document.getElementById('macros').innerHTML='<div class="macro-card" style="grid-column:span 2"><div class="macro-val">🍕 Libero</div><div class="macro-lbl">mangia quello che vuoi</div></div>';
+  } else {
+    document.getElementById('macros').innerHTML=
+      '<div class="macro-card"><div class="macro-val">'+d.c+'</div><div class="macro-lbl">🌾 carbo</div></div>'+
+      '<div class="macro-card"><div class="macro-val">'+d.p+'</div><div class="macro-lbl">💪 prot</div></div>';
+  }
+  document.getElementById('meals').innerHTML=d.meals.map(m=>{
+    const optBadge=m.opt?'<span class="meal-optional">se hai voglia 🙂</span>':'';
+    return '<div class="meal-item'+(m.opt?' optional':'')+'">'+
+      '<div class="meal-header">'+(m.t?'<span class="meal-time">'+m.t+'</span>':'')+
+      '<span class="meal-name">'+m.n+'</span>'+optBadge+'</div>'+
+      '<div style="font-size:13px;color:var(--muted);margin-top:4px">'+m.body+'</div>'+
+      (m.macro?'<div class="meal-macro">'+m.macro+'</div>':'')+
+      (m.note?'<div class="meal-note">💡 '+m.note+'</div>':'')+
+      '</div>';
+  }).join('');
+}
+
+function setFase(f,el){
+  document.querySelectorAll('.fase-card').forEach(c=>{c.className='fase-card'});
+  el.classList.add(FASI[f].cls);
+  const fase=FASI[f];
+  document.getElementById('fase-content').innerHTML=
+    '<div class="card"><div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">'+fase.titolo+'</div>'+
+    '<div style="font-size:13px;color:var(--muted);margin-bottom:14px">'+fase.sotto+'</div>'+
+    fase.tips.map(tip=>'<div class="tip '+tip.tipo+'" style="margin-bottom:8px"><div class="tip-t">'+tip.t+'</div><div class="tip-b">'+tip.b+'</div></div>').join('')+'</div>';
+}
+
+function dots(id,arr,idx){
+  document.getElementById(id).innerHTML=arr.map((_,i)=>'<div class="dot '+(i===idx?'on':'')+'"></div>').join('');
+}
+
+function rAlt(){
+  document.getElementById('pe').textContent=PR[pi].e;document.getElementById('pn').textContent=PR[pi].n;document.getElementById('pd').textContent=PR[pi].d;dots('pd2',PR,pi);
+  document.getElementById('fe').textContent=FM[fi].e;document.getElementById('fn').textContent=FM[fi].n;document.getElementById('fd').textContent=FM[fi].d;dots('fd2',FM,fi);
+  document.getElementById('ce').textContent=CA[ci].e;document.getElementById('cn').textContent=CA[ci].n;document.getElementById('cd').textContent=CA[ci].d;dots('cd2',CA,ci);
+}
+function nP(){pi=(pi+1)%PR.length;rAlt();}
+function nF(){fi=(fi+1)%FM.length;rAlt();}
+function nC(){ci=(ci+1)%CA.length;rAlt();}
+
+function copyWA(){
+  const peso=document.getElementById('pi').value||'—';
+  const sonno=document.getElementById('si').value;
+  const energia=document.getElementById('ei').value;
+  const perf=document.getElementById('fi').value;
+  const fame=document.getElementById('hi').value;
+  const voglia=document.getElementById('vi').value;
+  const all=document.getElementById('ai').value||'—';
+  const ciclo=document.getElementById('cli').value||'—';
+  const note=document.getElementById('ni').value||'—';
+  const msg='📊 Check-in settimanale Lisa\n\n⚖️ Peso: '+peso+' kg\n😴 Sonno: '+sonno+'/10\n⚡ Energia: '+energia+'/10\n💪 Performance: '+perf+'/10\n🍽️ Fame: '+fame+'/10\n🤤 Voglia di mangiare: '+voglia+'/10\n🚴 Allenamenti: '+all+'\n🌸 Fase ciclo: '+ciclo+'\n📝 Note: '+note;
+  navigator.clipboard.writeText(msg).then(()=>{
+    document.getElementById('copy-ok').style.display='block';
+    setTimeout(()=>{document.getElementById('copy-ok').style.display='none';},3000);
+  }).catch(()=>{prompt('Copia questo messaggio:',msg);});
+}
+
+function saveCI(){
+  const btn=document.querySelector('.save-btn');
+  btn.textContent='⏳ Salvataggio...';btn.disabled=true;
+  const data={
+    date:new Date().toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'long',year:'numeric'}),
+    peso:document.getElementById('pi').value||'—',
+    sonno:document.getElementById('si').value,
+    energia:document.getElementById('ei').value,
+    performance:document.getElementById('fi').value,
+    fame:document.getElementById('hi').value,
+    voglia:document.getElementById('vi').value,
+    allenamenti:document.getElementById('ai').value||'—',
+    ciclo:document.getElementById('cli').value||'—',
+    note:document.getElementById('ni').value
+  };
+  let h=[];
+  try{h=JSON.parse(localStorage.getItem('ci_Lisa')||'[]');}catch(e){h=[];}
+  h.unshift(data);if(h.length>12)h=h.slice(0,12);
+  localStorage.setItem('ci_Lisa',JSON.stringify(h));
+  setTimeout(()=>{btn.textContent='✅ Salva check-in';btn.disabled=false;},1500);
+  document.getElementById('pi').value='';document.getElementById('ni').value='';document.getElementById('ai').value='';
+  document.getElementById('pv').textContent='— kg';document.getElementById('av').textContent='—';
+  rHist();
+}
+
+function rHist(){
+  let h=[];
+  try{h=JSON.parse(localStorage.getItem('ci_Lisa')||'[]');}catch(e){h=[];}
+  document.getElementById('ci-hist').innerHTML=h.length?h.map(e=>
+    '<div class="ci-entry">'+
+    '<div class="ci-date">📅 '+e.date+'</div>'+
+    '<div class="ci-row"><span>⚖️ Peso</span><strong>'+e.peso+' kg</strong></div>'+
+    '<div class="ci-row"><span>😴 Sonno</span><strong>'+e.sonno+'/10</strong></div>'+
+    '<div class="ci-row"><span>⚡ Energia</span><strong>'+e.energia+'/10</strong></div>'+
+    '<div class="ci-row"><span>💪 Performance</span><strong>'+e.performance+'/10</strong></div>'+
+    '<div class="ci-row"><span>🍽️ Fame</span><strong>'+e.fame+'/10</strong></div>'+
+    '<div class="ci-row"><span>🤤 Voglia di mangiare</span><strong>'+e.voglia+'/10</strong></div>'+
+    '<div class="ci-row"><span>🚴 Allenamenti</span><strong>'+e.allenamenti+'</strong></div>'+
+    '<div class="ci-row"><span>🌸 Ciclo</span><strong>'+e.ciclo+'</strong></div>'+
+    (e.note?'<div class="ci-note">"'+e.note+'"</div>':'')+
+    '</div>'
+  ).join(''):'<div class="empty">Nessun check-in ancora.<br>Inizia lunedì 💪</div>';
+}
+
+rAlt();rPiano();rHist();
+</script>
+</body>
+</html>
