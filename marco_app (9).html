@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Marco Maddiotto · Piano Nutrizionale · Silvia Penso</title>
+<style>
+:root{--green:#144D35;--green-mid:#1E734E;--green-light:#2E9E6B;--green-bg:#EAF3DE;--green-pale:#F2F9F5;--amber:#D4700A;--amber-bg:#FAEEDA;--blue:#1A5E9A;--blue-bg:#E6F1FB;--red-bg:#FAECE7;--red:#993C1D;--gray:#555;--gray-bg:#F5F5F5;--border:#D8E8DC;--text:#1A1A1A;--muted:#666;--white:#FFFFFF;--r:14px;--rs:8px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F1;color:var(--text);font-size:15px;line-height:1.5;padding-bottom:60px}
+.topbar{background:var(--green);position:sticky;top:0;z-index:100}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.brand-name{font-size:13px;font-weight:600;color:#fff}
+.brand-sub{font-size:10px;color:#90C8A8;letter-spacing:.06em;text-transform:uppercase}
+.client-pill{background:rgba(255,255,255,.15);border-radius:20px;padding:5px 12px;font-size:12px;color:#fff;font-weight:500}
+.nav-tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:2px;background:#0F3D25;padding:0 8px}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:10px 14px;font-size:12px;font-weight:500;color:#90C8A8;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-tab.active{color:#fff;border-bottom-color:#4EC88A}
+.section{display:none;padding:16px}
+.section.active{display:block}
+.container{max-width:720px;margin:0 auto}
+.card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.card-title{font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.hero{background:linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);border-radius:var(--r);padding:24px 16px;margin-bottom:12px;color:#fff}
+.hero-name{font-size:26px;font-weight:700;margin-bottom:4px}
+.hero-sub{font-size:13px;color:#B0E0C0;margin-bottom:16px}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hero-stat{background:rgba(255,255,255,.12);border-radius:8px;padding:12px 8px;text-align:center}
+.hero-stat-val{font-size:20px;font-weight:700;color:#fff}
+.hero-stat-lbl{font-size:10px;color:#B0E0C0;margin-top:4px}
+.workout-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.workout-btn{padding:12px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);cursor:pointer;transition:all .2s;text-align:center}
+.workout-btn:hover{border-color:var(--green);background:var(--green-pale)}
+.workout-emoji{font-size:20px;display:block;margin-bottom:4px}
+.workout-name{font-size:12px;font-weight:600;color:var(--text)}
+.workout-kcal{font-size:11px;color:var(--green);font-weight:700;margin-top:4px}
+.workout-carb{font-size:10px;color:var(--muted);margin-top:2px}
+.macro-box{background:var(--green-pale);border-radius:var(--r);padding:16px;margin:16px 0;border-left:4px solid var(--green)}
+.macro-row{display:flex;justify-content:space-between;padding:10px 0;font-size:14px;border-bottom:1px solid #E0EFD9}
+.macro-row:last-child{border-bottom:none}
+.macro-label{color:var(--muted);font-weight:500}
+.macro-val{font-weight:700;color:var(--green);font-size:17px}
+.meta-info{font-size:11px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid #E0EFD9}
+.meal-section{background:var(--gray-bg);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.meal-header{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;text-transform:uppercase}
+.meal-kcal{font-size:11px;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #E0E0E0;font-weight:600}
+.meal-option{background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px;margin-bottom:6px;cursor:pointer;transition:all .2s}
+.meal-option:hover{border-color:var(--green);background:var(--green-pale)}
+.meal-option-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.meal-option-ing{font-size:11px;color:var(--muted)}
+.meal-macro{font-size:11px;color:var(--green);font-weight:600;margin-top:4px}
+.food-item{background:var(--white);border:1px solid var(--border);border-radius:var(--rs);padding:10px;margin-bottom:6px}
+.food-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.food-macro{font-size:11px;color:var(--green);font-weight:600}
+.category-header{font-size:13px;font-weight:600;color:var(--green);text-transform:uppercase;margin-top:16px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.tip{border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:3px solid}
+.tip-g{background:var(--green-bg);border-color:var(--green-light)}
+.progress-item{padding:12px;margin-bottom:8px;background:var(--green-pale);border-radius:8px;border-left:3px solid var(--green)}
+.progress-label{font-weight:600;color:var(--green);margin-bottom:4px;font-size:13px}
+.progress-detail{font-size:12px;color:var(--muted);line-height:1.6}
+.footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div><div class="brand-name">Silvia Penso</div><div class="brand-sub">Performance Nutrizionale</div></div>
+    <div class="client-pill">👤 Marco · 72.5kg · BMR 1621</div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="show('home',this)">🏠 Home</div>
+    <div class="nav-tab" onclick="show('piani',this)">🥗 Piani</div>
+    <div class="nav-tab" onclick="show('alternative',this)">🔄 Alternative</div>
+  </div>
+</div>
+
+<div class="section active" id="s-home">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-name">Marco 💪</div>
+      <div class="hero-sub">Triathlon · Ricomposizione corporea</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-val">72.5</div>
+          <div class="hero-stat-lbl">kg peso</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">20.1%</div>
+          <div class="hero-stat-lbl">body fat</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">3 mesi</div>
+          <div class="hero-stat-lbl">piano</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏃 Tutte le opzioni di allenamento</div>
+      <div class="workout-grid" id="workout-grid">
+        <!-- Generato via JS -->
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Metabolismo</div>
+      <div style="font-size:13px;line-height:1.8">
+        <strong>BMR (Katch-McArdle):</strong> 1621 kcal<br>
+        <strong>Base (BMR × 1.2 - deficit 300):</strong> 1645 kcal<br>
+        <strong>Proteine target:</strong> 155g/die (2.14 g/kg)<br>
+        <strong>Deficit giornaliero:</strong> 300 kcal
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 Progressi nei mesi</div>
+      <div class="progress-item">
+        <div class="progress-label">✅ Mese 1: Eccellente</div>
+        <div class="progress-detail">−1.6 kg grasso corporeo, +0.23 kg di massa muscolare.</div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label">⚠️ Mese 2: Transizione</div>
+        <div class="progress-detail">Aumento volume endurance. Soluzione: +30-35g proteine post-palestra entro 30 min.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="s-piani">
+  <div class="container">
+    <div class="card">
+      <div class="card-title">🏃 Seleziona allenamento oggi</div>
+      <div class="workout-grid" id="workout-grid-piani">
+        <!-- Generato via JS -->
+      </div>
+    </div>
+
+    <div class="card" id="macros-card" style="display:none">
+      <div class="card-title" id="selected-day">📊 Allenamento selezionato</div>
+      <div class="macro-box">
+        <div class="macro-row">
+          <span class="macro-label">⚡ Kcal Totali</span>
+          <span class="macro-val" id="total-kcal">1645</span>
+        </div>
+        <div class="macro-row">
+          <span class="macro-label">🌾 Carboidrati</span>
+          <span class="macro-val" id="total-carb">160g</span>
+        </div>
+        <div class="macro-row">
+          <span class="macro-label">💪 Proteine</span>
+          <span class="macro-val" id="total-prot">155g</span>
+        </div>
+        <div class="macro-row">
+          <span class="macro-label">💧 Acqua</span>
+          <span class="macro-val" id="total-water">3.2L</span>
+        </div>
+        <div class="meta-info">
+          <strong>BMR:</strong> 1621 kcal | <strong>Attività:</strong> <span id="activity-detail">—</span> | <strong>Grassi (calcolati):</strong> <span id="total-fat">36g</span>
+        </div>
+      </div>
+
+      <div id="meals-container"></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="s-alternative">
+  <div class="container">
+    <div class="card">
+      <div class="card-title">🔄 Alimenti Intercambiabili</div>
+      <div class="tip tip-g" style="margin-bottom:16px">
+        <div style="font-size:12px;line-height:1.6">
+          <strong>Come usare:</strong> Tutti gli alimenti nella stessa categoria sono intercambiabili. Se scegli una porzione diversa, le kcal cambiano proporzionalmente.<br><br>
+          <strong>PRANZO:</strong> pollo / tacchino / pesce magro / legumi<br>
+          <strong>CENA:</strong> pesce / uova / yogurt greco / carne leggera<br><br>
+          <strong>Scelta carboidrati:</strong> Riso/pasta/couscous/avena per energia. Patate/pane per sazietà.
+        </div>
+      </div>
+
+      <div class="category-header">🌾 Carboidrati</div>
+      <div class="food-item"><div class="food-name">Riso bianco crudo</div><div class="food-macro">100 g → ~360 kcal | P:6g C:80g</div></div>
+      <div class="food-item"><div class="food-name">Riso integrale crudo</div><div class="food-macro">100 g → ~340 kcal | P:7g C:72g</div></div>
+      <div class="food-item"><div class="food-name">Pasta secca</div><div class="food-macro">100 g → ~350 kcal | P:13g C:74g</div></div>
+      <div class="food-item"><div class="food-name">Pasta integrale</div><div class="food-macro">100 g → ~330 kcal | P:12g C:62g</div></div>
+      <div class="food-item"><div class="food-name">Couscous</div><div class="food-macro">100 g → ~360 kcal | P:13g C:76g</div></div>
+      <div class="food-item"><div class="food-name">Fiocchi d'avena</div><div class="food-macro">90 g → ~340 kcal | P:12g C:60g</div></div>
+      <div class="food-item"><div class="food-name">Polenta istantanea</div><div class="food-macro">105 g → ~360 kcal | P:8g C:76g</div></div>
+      <div class="food-item"><div class="food-name">Pane bianco</div><div class="food-macro">125 g → ~330 kcal | P:10g C:61g</div></div>
+      <div class="food-item"><div class="food-name">Pane integrale</div><div class="food-macro">130 g → ~310 kcal | P:13g C:53g</div></div>
+      <div class="food-item"><div class="food-name">Patate bollite</div><div class="food-macro">400 g → ~320 kcal | P:7g C:70g</div></div>
+      <div class="food-item"><div class="food-name">Patate dolci bollite</div><div class="food-macro">380 g → ~330 kcal | P:6g C:76g</div></div>
+
+      <div class="category-header">💪 Proteine — Carne & Pesce</div>
+      <div class="food-item"><div class="food-name">Petto di pollo</div><div class="food-macro">135–165 g → ~130–165 kcal | P:31g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Petto di tacchino</div><div class="food-macro">135–165 g → ~130–160 kcal | P:29g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Vitello magro</div><div class="food-macro">120 g → ~150 kcal | P:25g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Manzo magro (5% grassi)</div><div class="food-macro">120 g → ~180 kcal | P:26g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Bresaola</div><div class="food-macro">80 g → ~120 kcal | P:22g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Merluzzo</div><div class="food-macro">150 g → ~123 kcal | P:26g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Nasello</div><div class="food-macro">150 g → ~123 kcal | P:27g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Orata / Branzino</div><div class="food-macro">150 g → ~192 kcal | P:27g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Tonno fresco</div><div class="food-macro">150 g → ~270 kcal | P:38g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Salmone</div><div class="food-macro">120 g → ~250 kcal | P:24g C:0g</div></div>
+      <div class="food-item"><div class="food-name">Sgombro</div><div class="food-macro">120 g → ~300 kcal | P:22g C:0g</div></div>
+      <div class="food-item"><div class="food-name">2 uova intere</div><div class="food-macro">~140 kcal | P:12g C:1.1g</div></div>
+      <div class="food-item"><div class="food-name">3 uova intere</div><div class="food-macro">~210 kcal | P:18g C:1.7g</div></div>
+      <div class="food-item"><div class="food-name">2 uova + 150g albumi</div><div class="food-macro">~200 kcal | P:40g C:1.5g</div></div>
+
+      <div class="category-header">🌱 Proteine Vegetali</div>
+      <div class="food-item"><div class="food-name">Tofu</div><div class="food-macro">150 g → ~180 kcal | P:20g C:2g G:10g</div></div>
+      <div class="food-item"><div class="food-name">Tempeh</div><div class="food-macro">120 g → ~200 kcal | P:22g C:9g G:11g</div></div>
+      <div class="food-item"><div class="food-name">Lenticchie cotte</div><div class="food-macro">150 g → ~150 kcal | P:12g C:27g G:0.8g</div></div>
+      <div class="food-item"><div class="food-name">Ceci cotti</div><div class="food-macro">150 g → ~180 kcal | P:10g C:32g G:3g</div></div>
+
+      <div class="category-header">🥛 Latticini & Yogurt</div>
+      <div class="food-item"><div class="food-name">Yogurt greco 2%</div><div class="food-macro">200 g → ~140 kcal | P:20g C:7g G:0.8g</div></div>
+      <div class="food-item"><div class="food-name">Skyr</div><div class="food-macro">170 g → ~100 kcal | P:17g C:6g G:0.7g</div></div>
+      <div class="food-item"><div class="food-name">Fiocchi di latte</div><div class="food-macro">125 g → ~138 kcal | P:25g C:4.4g G:6g</div></div>
+      <div class="food-item"><div class="food-name">Ricotta fresca</div><div class="food-macro">150 g → ~261 kcal | P:28.5g C:5g G:15g</div></div>
+      <div class="food-item"><div class="food-name">Formaggio magro (ricotta salata)</div><div class="food-macro">80 g → ~128 kcal | P:20g C:0.8g G:5.2g</div></div>
+      <div class="food-item"><div class="food-name">Parmigiano reggiano</div><div class="food-macro">30 g → ~129 kcal | P:11.4g C:1g G:8.7g</div></div>
+
+      <div class="category-header">🌰 Frutta Secca & Oli</div>
+      <div class="food-item"><div class="food-name">Mandorle</div><div class="food-macro">579 kcal | P:21g C:22g G:50g</div></div>
+      <div class="food-item"><div class="food-name">Arachidi</div><div class="food-macro">567 kcal | P:26g C:16g G:49g</div></div>
+      <div class="food-item"><div class="food-name">Burro di arachidi naturale</div><div class="food-macro">588 kcal | P:25g C:20g G:50g</div></div>
+      <div class="food-item"><div class="food-name">Avocado</div><div class="food-macro">160 kcal | P:2g C:9g G:15g</div></div>
+      <div class="food-item"><div class="food-name">Olio (qualsiasi)</div><div class="food-macro">884 kcal | P:0g C:0g G:100g</div></div>
+      <div class="food-item"><div class="food-name">Burro</div><div class="food-macro">717 kcal | P:0.9g C:0.1g G:81g</div></div>
+
+      <div class="category-header">🍌 Frutta</div>
+      <div class="food-item"><div class="food-name">Banana</div><div class="food-macro">89 kcal | P:1.1g C:23g G:0.3g</div></div>
+      <div class="food-item"><div class="food-name">Mela</div><div class="food-macro">52 kcal | P:0.3g C:14g G:0.2g</div></div>
+      <div class="food-item"><div class="food-name">Fragole</div><div class="food-macro">32 kcal | P:0.7g C:7.7g G:0.3g</div></div>
+      <div class="food-item"><div class="food-name">Mirtilli</div><div class="food-macro">57 kcal | P:0.7g C:14g G:0.3g</div></div>
+      <div class="food-item"><div class="food-name">Melone</div><div class="food-macro">34 kcal | P:0.8g C:8g G:0.2g</div></div>
+
+      <div class="category-header">🥬 Verdure & Salse</div>
+      <div class="food-item"><div class="food-name">Zucchine</div><div class="food-macro">21 kcal | P:1.4g C:3.9g G:0.4g</div></div>
+      <div class="food-item"><div class="food-name">Pomodori freschi</div><div class="food-macro">18 kcal | P:0.9g C:3.9g G:0.2g</div></div>
+      <div class="food-item"><div class="food-name">Salsa pomodoro</div><div class="food-macro">25 kcal | P:1g C:5g G:0.3g</div></div>
+      <div class="food-item"><div class="food-name">Pesto</div><div class="food-macro">300 kcal | P:5g C:4g G:30g</div></div>
+      <div class="food-item"><div class="food-name">Ragù leggero (fatto in casa)</div><div class="food-macro">90 kcal | P:10g C:4g G:3.5g</div></div>
+
+      <div class="category-header">🛏️ Pre-Nanna (Caseina)</div>
+      <div class="food-item"><div class="food-name">Ricotta fresca</div><div class="food-macro">174 kcal | P:19g C:3.3g G:10g</div></div>
+      <div class="food-item"><div class="food-name">Yogurt greco</div><div class="food-macro">59 kcal | P:10g C:3.5g G:0.4g</div></div>
+      <div class="food-item"><div class="food-name">Fiocchi di latte</div><div class="food-macro">110 kcal | P:20g C:3.5g G:4.8g</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Piano aggiornato · Giugno 2026 · <strong>Silvia Penso</strong> · Performance Nutrizionale | BMR 1621 | Base 1645 kcal</div>
+
+<script>
+const workouts = {
+  riposo: { kcal: 1884, carb: 174, prot: 180, water: 3.2, emoji: "😴", name: "Riposo", activity: "Base (senza attività)" },
+  palestra: { kcal: 2235, carb: 244, prot: 180, water: 3.7, emoji: "💪", name: "Palestra", activity: "+350 kcal (neuromuscolare)" },
+  bici: { kcal: 2384, carb: 274, prot: 180, water: 4.0, emoji: "🚴", name: "Bici", activity: "+500 kcal (alta energia)" },
+  nuoto: { kcal: 2184, carb: 234, prot: 180, water: 4.0, emoji: "🏊", name: "Nuoto", activity: "+300 kcal (1h moderato)" },
+  corsa: { kcal: 2184, carb: 234, prot: 180, water: 4.2, emoji: "🏃", name: "Corsa", activity: "+300 kcal (1h moderato)" },
+  lungo: { kcal: 3185, carb: 419, prot: 180, water: 5.2, emoji: "🚴", name: "Lungo Bici", activity: "+1300 kcal (2h30+)" },
+  palBici: { kcal: 2735, carb: 314, prot: 180, water: 4.7, emoji: "💪🚴", name: "Palestra + Bici", activity: "+850 kcal" },
+  palNuoto: { kcal: 2535, carb: 274, prot: 180, water: 4.7, emoji: "💪🏊", name: "Palestra + Nuoto", activity: "+650 kcal" },
+  palCorsa: { kcal: 2535, carb: 274, prot: 180, water: 4.9, emoji: "💪🏃", name: "Palestra + Corsa", activity: "+650 kcal" },
+  biNuoto: { kcal: 2684, carb: 304, prot: 180, water: 4.8, emoji: "🚴🏊", name: "Bici + Nuoto", activity: "+800 kcal" },
+  biCorsa: { kcal: 2684, carb: 304, prot: 180, water: 5.0, emoji: "🚴🏃", name: "Bici + Corsa", activity: "+800 kcal" },
+  nuCorsa: { kcal: 2484, carb: 264, prot: 180, water: 5.2, emoji: "🏊🏃", name: "Nuoto + Corsa", activity: "+600 kcal" }
+};
+
+const plans = {
+  riposo: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Ricotta e fragole", kcal: 411, carb: 45, prot: 28, fat: 12, ing: "150g ricotta, 50g muesli, 100g fragole, 1 cucchiaio miele, 7 mandorle" },
+      { type: "🥣 Salato", name: "Uova e toast", kcal: 411, carb: 45, prot: 32, fat: 12, ing: "3 uova, 2 fette pane integrale, 10g burro, sale, pepe" }
+    ],
+    lunch: { name: "Pollo e patate", kcal: 526, carb: 42, prot: 45, fat: 15, ing: "140g petto pollo, 250g patate bollite, 50g verdure, olio 10ml" },
+    snack: { name: "Yogurt granola", kcal: 296, carb: 32, prot: 18, fat: 8, ing: "150g yogurt greco 2%, 30g granola, 100g mirtilli" },
+    dinner: { name: "Branzino al forno", kcal: 411, carb: 52, prot: 42, fat: 7, ing: "180g branzino, 200g riso bianco crudo, 150g verdure, olio 10ml" },
+    prenanna: { name: "Ricotta miele mandorle", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, 1 cucchiaio miele, 5 mandorle" }
+  },
+  palestra: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Pancake proteico", kcal: 499, carb: 75, prot: 18, fat: 10, ing: "1 uovo, 60g farina integrale, 1 banana media, 1.5 cucchiaio miele, 150ml latte" },
+      { type: "🥣 Salato", name: "Frittata verdure", kcal: 499, carb: 75, prot: 28, fat: 16, ing: "4 uova, 150g zucchine, 150g pomodori, 40g parmigiano, olio 12ml, pane 80g" }
+    ],
+    lunch: { name: "Pasta tonno salsa", kcal: 638, carb: 72, prot: 45, fat: 14, ing: "110g pasta integrale, 110g tonno, 250g salsa pomodoro, olio 10ml, parmigiano 15g" },
+    snack: { name: "Banana burro arachidi", kcal: 359, carb: 40, prot: 12, fat: 12, ing: "1 banana grande, 1.5 cucchiaio burro arachidi" },
+    dinner: { name: "Pollo e riso", kcal: 499, carb: 60, prot: 52, fat: 10, ing: "160g petto pollo, 95g riso bianco crudo, 150g zucchine, olio 10ml" },
+    prenanna: { name: "Yogurt greco cereali", kcal: 280, carb: 38, prot: 22, fat: 2, ing: "170g yogurt greco 2%, 30g cereali, 100g fragole" }
+  },
+  bici: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Porridge classico", kcal: 536, carb: 85, prot: 18, fat: 12, ing: "80g avena, 300ml latte, 1 banana media, 1 cucchiaio miele" },
+      { type: "🥣 Salato", name: "Uova toast abbondante", kcal: 536, carb: 85, prot: 32, fat: 16, ing: "3 uova, 2.5 fette pane integrale, 14g burro, formaggio 30g" }
+    ],
+    lunch: { name: "Riso pollo pesto", kcal: 686, carb: 78, prot: 48, fat: 18, ing: "110g riso bianco crudo, 145g pollo, 35g pesto, 150g verdure" },
+    snack: { name: "Mela ricotta miele", kcal: 386, carb: 45, prot: 20, fat: 10, ing: "1 mela media, 120g ricotta, 1 cucchiaio miele" },
+    dinner: { name: "Pasta ragù", kcal: 686, carb: 82, prot: 48, fat: 14, ing: "110g pasta integrale, 180g ragù, parmigiano 20g" },
+    prenanna: { name: "Ricotta miele mandorle", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, 1 cucchiaio miele, 5 mandorle" }
+  },
+  nuoto: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Ricotta fragole", kcal: 486, carb: 55, prot: 32, fat: 14, ing: "160g ricotta, 55g muesli, 110g fragole, 1 cucchiaio miele, 7 mandorle" },
+      { type: "🥣 Salato", name: "Uova toast formaggio", kcal: 486, carb: 55, prot: 36, fat: 14, ing: "3 uova, 2.5 fette pane, 10g burro, formaggio 35g, verdure" }
+    ],
+    lunch: { name: "Poke bowl", kcal: 622, carb: 68, prot: 38, fat: 16, ing: "115g riso integrale crudo, 120g tonno, 35g avocado, 80g edamame, nori, sesamo" },
+    snack: { name: "Yogurt granola", kcal: 350, carb: 40, prot: 18, fat: 12, ing: "170g yogurt greco, 45g granola, 100g mirtilli" },
+    dinner: { name: "Salmone patate dolci", kcal: 622, carb: 68, prot: 48, fat: 16, ing: "165g salmone, 260g patate dolci, olio 12ml" },
+    prenanna: { name: "Fiocchi latte pane", kcal: 260, carb: 25, prot: 28, fat: 5, ing: "150g fiocchi di latte, 1 fetta pane tostato, 1 cucchiaio miele" }
+  },
+  corsa: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Ricotta e fragole", kcal: 486, carb: 55, prot: 32, fat: 14, ing: "160g ricotta, 55g muesli, 110g fragole, 1 cucchiaio miele, 7 mandorle" },
+      { type: "🥣 Salato", name: "Uova toast formaggio", kcal: 486, carb: 55, prot: 36, fat: 14, ing: "3 uova, 2.5 fette pane, 10g burro, formaggio 35g, verdure" }
+    ],
+    lunch: { name: "Riso pollo", kcal: 622, carb: 72, prot: 48, fat: 14, ing: "105g riso bianco crudo, 145g pollo, 150g zucchine, olio 10ml" },
+    snack: { name: "Banana burro arachidi", kcal: 350, carb: 38, prot: 12, fat: 14, ing: "1 banana grande, 1.5 cucchiaio burro arachidi" },
+    dinner: { name: "Branzino riso", kcal: 622, carb: 72, prot: 48, fat: 14, ing: "185g branzino, 100g riso bianco crudo, 150g verdure, olio 10ml" },
+    prenanna: { name: "Ricotta miele", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, 1 cucchiaio miele, 5 mandorle" }
+  },
+  lungo: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Pancake XXL", kcal: 736, carb: 105, prot: 25, fat: 16, ing: "2 uova, 85g farina, 1.5 banana, 2 cucchiai miele, 200ml latte" },
+      { type: "🥣 Salato", name: "Frittata abbondante", kcal: 736, carb: 105, prot: 35, fat: 20, ing: "5 uova, 200g zucchine, 150g pomodori, 50g parmigiano, olio 15ml, pane 100g" }
+    ],
+    lunch: { name: "Pasta ragù abbondante", kcal: 942, carb: 110, prot: 55, fat: 22, ing: "140g pasta integrale, 220g ragù, parmigiano 25g" },
+    snack: { name: "Frullato proteico", kcal: 531, carb: 65, prot: 20, fat: 16, ing: "300ml latte, 1 banana grande, 2 cucchiai burro arachidi, miele" },
+    dinner: { name: "Pollo patate abbondante", kcal: 736, carb: 88, prot: 56, fat: 18, ing: "200g pollo, 320g patate, 50g verdure, olio 12ml" },
+    prenanna: { name: "Yogurt greco cereali", kcal: 280, carb: 38, prot: 22, fat: 2, ing: "170g yogurt greco, 30g cereali, 100g fragole" }
+  },
+  palBici: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Porridge classico", kcal: 624, carb: 95, prot: 20, fat: 14, ing: "85g avena, 320ml latte, 1 banana, 1.5 cucchiaio miele" },
+      { type: "🥣 Salato", name: "Uova pane formaggio", kcal: 624, carb: 95, prot: 34, fat: 18, ing: "4 uova, 3 fette pane integrale, 15g burro, formaggio 40g" }
+    ],
+    lunch: { name: "Riso pollo pesto", kcal: 798, carb: 90, prot: 52, fat: 20, ing: "120g riso bianco crudo, 150g pollo, 40g pesto, 160g verdure" },
+    snack: { name: "Banana burro arachidi XXL", kcal: 449, carb: 52, prot: 14, fat: 16, ing: "1 banana grande, 1.5 cucchiaio burro arachidi" },
+    dinner: { name: "Pasta tonno salsa", kcal: 798, carb: 90, prot: 50, fat: 18, ing: "125g pasta integrale, 115g tonno, 280g salsa, olio 12ml, parmigiano 18g" },
+    prenanna: { name: "Ricotta miele", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, miele, mandorle" }
+  },
+  palNuoto: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Pancake proteico", kcal: 574, carb: 80, prot: 22, fat: 14, ing: "1.5 uovo, 60g farina, 1.2 banana, 1.5 cucchiaio miele, 150ml latte" },
+      { type: "🥣 Salato", name: "Uova toast formaggio XXL", kcal: 574, carb: 80, prot: 34, fat: 16, ing: "4 uova, 2.5 fette pane, 12g burro, formaggio 40g, verdure" }
+    ],
+    lunch: { name: "Pasta ragù", kcal: 734, carb: 85, prot: 50, fat: 18, ing: "115g pasta integrale, 190g ragù, parmigiano 22g" },
+    snack: { name: "Mela ricotta abbondante", kcal: 413, carb: 52, prot: 22, fat: 12, ing: "1 mela grande, 130g ricotta, 1.5 cucchiaio miele" },
+    dinner: { name: "Salmone patate dolci", kcal: 734, carb: 82, prot: 52, fat: 18, ing: "185g salmone, 295g patate dolci, olio 14ml" },
+    prenanna: { name: "Yogurt cereali", kcal: 280, carb: 38, prot: 22, fat: 2, ing: "170g yogurt greco, cereali, fragole" }
+  },
+  palCorsa: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Pancake proteico", kcal: 574, carb: 80, prot: 22, fat: 14, ing: "1.5 uovo, 60g farina, 1.2 banana, 1.5 cucchiaio miele, 150ml latte" },
+      { type: "🥣 Salato", name: "Uova toast formaggio", kcal: 574, carb: 80, prot: 34, fat: 16, ing: "4 uova, 2.5 fette pane, 12g burro, formaggio 40g" }
+    ],
+    lunch: { name: "Riso pollo", kcal: 734, carb: 85, prot: 52, fat: 16, ing: "115g riso, 150g pollo, 155g zucchine, olio 11ml" },
+    snack: { name: "Banana burro arachidi", kcal: 413, carb: 50, prot: 14, fat: 14, ing: "1 banana grande, 1.5 cucchiaio burro arachidi" },
+    dinner: { name: "Branzino riso", kcal: 734, carb: 85, prot: 52, fat: 16, ing: "190g branzino, 108g riso crudo, verdure 155g, olio 11ml" },
+    prenanna: { name: "Ricotta miele", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, miele, mandorle" }
+  },
+  biNuoto: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Ricotta fragole", kcal: 611, carb: 65, prot: 32, fat: 16, ing: "165g ricotta, 60g muesli, 115g fragole, 1 cucchiaio miele, 7 mandorle" },
+      { type: "🥣 Salato", name: "Uova pane formaggio", kcal: 611, carb: 65, prot: 36, fat: 16, ing: "4 uova, 2.5 fette pane, 12g burro, formaggio 40g, verdure" }
+    ],
+    lunch: { name: "Poke bowl", kcal: 782, carb: 88, prot: 42, fat: 20, ing: "125g riso integrale crudo, 125g tonno, 40g avocado, 85g edamame, nori, sesamo" },
+    snack: { name: "Yogurt granola", kcal: 440, carb: 52, prot: 20, fat: 14, ing: "180g yogurt greco, 50g granola, 110g mirtilli" },
+    dinner: { name: "Salmone branzino", kcal: 782, carb: 88, prot: 56, fat: 18, ing: "185g pesce mix, 110g riso crudo, verdure 160g, olio 12ml" },
+    prenanna: { name: "Yogurt cereali", kcal: 280, carb: 38, prot: 22, fat: 2, ing: "170g yogurt greco, cereali, fragole" }
+  },
+  biCorsa: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Porridge", kcal: 611, carb: 92, prot: 20, fat: 14, ing: "82g avena, 310ml latte, banana 1, miele 1.5 cucchiaio" },
+      { type: "🥣 Salato", name: "Uova pane formaggio", kcal: 611, carb: 92, prot: 34, fat: 16, ing: "4 uova, 3 fette pane, 12g burro, formaggio 35g" }
+    ],
+    lunch: { name: "Riso pollo pesto", kcal: 782, carb: 90, prot: 50, fat: 20, ing: "116g riso crudo, 148g pollo, 38g pesto, 155g verdure" },
+    snack: { name: "Mela ricotta", kcal: 440, carb: 52, prot: 22, fat: 12, ing: "190g mela, 125g ricotta, 1.5 cucchiaio miele" },
+    dinner: { name: "Pasta ragù", kcal: 782, carb: 90, prot: 52, fat: 18, ing: "116g pasta integrale, 185g ragù, parmigiano 22g" },
+    prenanna: { name: "Ricotta miele", kcal: 240, carb: 18, prot: 28, fat: 4, ing: "150g ricotta, miele, mandorle" }
+  },
+  nuCorsa: {
+    breakfast: [
+      { type: "🍯 Dolce", name: "Pancake proteico", kcal: 561, carb: 78, prot: 20, fat: 14, ing: "1.5 uovo, 58g farina, 1.1 banana, miele 1.5 cucchiaio, 145ml latte" },
+      { type: "🥣 Salato", name: "Uova toast formaggio", kcal: 561, carb: 78, prot: 32, fat: 14, ing: "4 uova, 2.5 fette pane, 11g burro, formaggio 35g" }
+    ],
+    lunch: { name: "Pasta tonno", kcal: 718, carb: 85, prot: 42, fat: 18, ing: "115g pasta integrale, 110g tonno, 260g salsa, olio 11ml, parmigiano 16g" },
+    snack: { name: "Banana burro arachidi", kcal: 404, carb: 48, prot: 12, fat: 14, ing: "1 banana grande, burro arachidi 1.5 cucchiaio" },
+    dinner: { name: "Branzino riso", kcal: 718, carb: 85, prot: 52, fat: 16, ing: "185g branzino, 105g riso crudo, verdure 152g, olio 11ml" },
+    prenanna: { name: "Yogurt cereali", kcal: 280, carb: 38, prot: 22, fat: 2, ing: "170g yogurt greco, cereali, fragole" }
+  }
+};
+
+function calcFat(kcal, prot, carb) {
+  const protKcal = prot * 4;
+  const carbKcal = carb * 4;
+  const fatKcal = kcal - protKcal - carbKcal;
+  return Math.round(fatKcal / 9);
+}
+
+function initWorkouts() {
+  const keys = Object.keys(workouts);
+  let html = '';
+  keys.forEach(key => {
+    const w = workouts[key];
+    html += `<div class="workout-btn" onclick="selectWorkout('${key}')" data-key="${key}"><div class="workout-emoji">${w.emoji}</div><div class="workout-name">${w.name}</div><div class="workout-kcal">${w.kcal} kcal</div><div class="workout-carb">C: ${w.carb}g</div></div>`;
+  });
+  document.getElementById('workout-grid').innerHTML = html;
+  document.getElementById('workout-grid-piani').innerHTML = html;
+}
+
+function selectWorkout(key) {
+  const w = workouts[key];
+  const p = plans[key];
+  
+  document.getElementById('selected-day').textContent = `📊 ${w.name}`;
+  document.getElementById('total-kcal').textContent = w.kcal;
+  document.getElementById('total-carb').textContent = w.carb + 'g';
+  document.getElementById('total-prot').textContent = w.prot + 'g';
+  document.getElementById('total-water').textContent = w.water.toFixed(1) + 'L';
+  document.getElementById('activity-detail').textContent = w.activity;
+  
+  const fatTotal = calcFat(w.kcal, w.prot, w.carb);
+  document.getElementById('total-fat').textContent = fatTotal + 'g';
+  
+  let html = '';
+  const meals = [
+    { key: 'breakfast', emoji: '🥣', time: '07:00', label: 'Colazione' },
+    { key: 'lunch', emoji: '🥗', time: '12:30', label: 'Pranzo' },
+    { key: 'snack', emoji: '🍌', time: '16:00', label: 'Spuntino' },
+    { key: 'dinner', emoji: '🍽️', time: '19:30', label: 'Cena' },
+    { key: 'prenanna', emoji: '🛏️', time: '21:30', label: 'Pre-Nanna' }
+  ];
+  
+  meals.forEach(m => {
+    if (m.key === 'breakfast') {
+      const opts = p[m.key];
+      html += `<div class="meal-section">
+        <div class="meal-header">${m.emoji} ${m.label} (${m.time})</div>
+        <div class="meal-kcal">${opts[0].kcal} kcal | C:${opts[0].carb}g P:${opts[0].prot}g G:${opts[0].fat}g</div>
+        <div class="meal-option"><div class="meal-option-title">${opts[0].type} ${opts[0].name}</div><div class="meal-option-ing">${opts[0].ing}</div></div>
+        <div class="meal-option"><div class="meal-option-title">${opts[1].type} ${opts[1].name}</div><div class="meal-option-ing">${opts[1].ing}</div></div>
+      </div>`;
+    } else {
+      const meal = p[m.key];
+      html += `<div class="meal-section">
+        <div class="meal-header">${m.emoji} ${m.label} (${m.time})</div>
+        <div class="meal-kcal">${meal.kcal} kcal | C:${meal.carb}g P:${meal.prot}g G:${meal.fat}g</div>
+        <div class="meal-option"><div class="meal-option-title">📍 ${meal.name}</div><div class="meal-option-ing">${meal.ing}</div></div>
+      </div>`;
+    }
+  });
+  
+  document.getElementById('meals-container').innerHTML = html;
+  document.getElementById('macros-card').style.display = 'block';
+  
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-piani').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab')[1].classList.add('active');
+}
+
+function show(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+initWorkouts();
+</script>
+</body>
+</html>
